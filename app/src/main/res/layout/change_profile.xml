@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tx_profile"
+        style="@style/TextHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_profile"
+        android:paddingLeft="30dp"
+        android:drawablePadding="30dp"
+        android:text="@string/profile"
+        app:layout_constraintBottom_toTopOf="@+id/et_password"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/et_email"
+        style="@style/MyButton.MyEditText"
+        android:drawableLeft="@drawable/ic_email"
+        android:gravity="center"
+        android:inputType="textEmailAddress"
+        android:paddingLeft="30dp"
+        android:text="@string/email"
+        app:layout_constraintBottom_toTopOf="@+id/et_password"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tx_profile" />
+
+    <EditText
+        android:id="@+id/et_password"
+        style="@style/MyButton.MyEditText"
+        android:drawableLeft="@drawable/ic_password"
+        android:paddingLeft="35dp"
+        android:text="@string/password_old"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.4" />
+
+    <EditText
+        android:id="@+id/et_new_password"
+        style="@style/MyButton.MyEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_password"
+        android:paddingLeft="35dp"
+        android:text="@string/password_new"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_password" />
+
+    <EditText
+        android:id="@+id/et_new_password2"
+        style="@style/MyButton.MyEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_password"
+        android:paddingLeft="35dp"
+        android:text="@string/password_repeat"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_new_password" />
+
+    <Button
+        android:id="@+id/btn_save"
+        style="@style/MyButton.Purple"
+        android:text="@string/save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_new_password2"
+        app:layout_constraintVertical_bias="0.188" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

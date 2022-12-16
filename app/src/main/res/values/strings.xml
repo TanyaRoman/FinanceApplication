@@ -1,0 +1,57 @@
+<resources>
+    <string name="app_name">FinanceApplication</string>
+
+    <string name="welcome">Добро пожаловать в мир криптовалюты</string>
+    <string name="log_in">Войти в аккаунт</string>
+    <string name="create">Создайте аккаунт</string>
+    <string name="create_profile">Регистрация</string>
+    <string name="input">Вход</string>
+    <string name="havent_profile">Еще нет аккаунта?</string>
+    <string name="log_in_profile">Войти в существующий аккаунт</string>
+
+    <string name="email">Почта</string>
+    <string name="password">Пароль</string>
+    <string name="password_new">Новый пароль</string>
+    <string name="password_repeat">Повторите новый пароль</string>
+    <string name="password_old">Старый пароль</string>
+    <string name="remember">Запомнить</string>
+    <string name="save">Сохранить</string>
+
+    <string name="profile">Профиль</string>
+    <string name="portfolio_go">Рассчитать портфель</string>
+
+    <string name="exit">Выйти из аккаунта</string>
+    <string name="back">назад</string>
+    <string name="back_main_page">главная страница</string>
+
+    <string name="error_email">некорректный почтовый адрес</string>
+    <string name="error_password">некорректный пароль</string>
+    <string name="error_old_password">некорректный старый пароль</string>
+    <string name="error_repeat_password">некорректный повтор пароля</string>
+
+    <string name="change_data_profile">Изменить данные</string>
+    <string name="portfolio_saved">Сохраненные портфели</string>
+    <string name="result_saved">Сохраненные рассчеты</string>
+    
+    <string name="choice_header">Выберете криптовалюты для рассчета</string>
+    <string name="find_crypto">Поиск по абревиатуре</string>
+    <string name="calculate">Рассчитать</string>
+    <string name="calculating">Считаем...</string>
+    
+    <string name="crypto_header">Параметры активов</string>
+    <string name="portfolio_header">Рассчитанные портфели</string>
+    <string name="profitability">Доходность</string>
+    <string name="risk">Риск</string>
+    <string name="expand">Развернуть</string>
+    <string name="save_calculate">Сохранить рассчеты</string>
+
+    <string name="detailing_portfolio">Детализация прортфеля</string>
+    <string name="name_crypto">Наименование</string>
+    <string name="percent">Процент</string>
+    <string name="save_portfolio">Сохранить портфель</string>
+
+    <string name="save_header">Данные сохранены в профиль</string>
+    <string name="back_to_calculate">Вернуться к рассчетам</string>
+    <string name="back_to_main">Вернуться на главную страницу</string>
+
+</resources>
