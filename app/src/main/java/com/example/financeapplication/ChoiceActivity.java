@@ -2,6 +2,7 @@ package com.example.financeapplication;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,10 +13,16 @@ import android.widget.CheckBox;
 import android.widget.CheckedTextView;
 import android.widget.ListView;
 import android.widget.Toast;
+//import androidx.constraintlayout.widget.ConstraintLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.financeapplication.logic.formationOfAnInvestmentPortfolio.ApiService;
+//import com.example.financeapplication.logic.coingecko.domain.Coins.CoinList;
+import com.litesoftwares.coingecko.domain.Coins.CoinList;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,8 +39,16 @@ public class ChoiceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.choice);
 
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
         lv = (ListView) findViewById(R.id.lv_choice);
-        initList();
+
+        try {
+            initList();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         myArrayAdapter = new MyArrayAdapter(this, R.layout.list_item_choice,
                 android.R.id.text1, criptoList);
@@ -53,12 +68,15 @@ public class ChoiceActivity extends AppCompatActivity {
                 .show();
     }
 
-    private void initList(){
-        criptoList.add("qwe");
-        criptoList.add("asd");
-        criptoList.add("qwtr");
-        criptoList.add("ijnv");
-        criptoList.add("fffio");
+    private void initList() throws IOException {
+        ApiService apiService = new ApiService();
+
+        apiService.addData();
+        List<CoinList> coins = apiService.getPopularCoins();
+
+        for (CoinList cl: coins) {
+            criptoList.add(cl.getName());
+        }
     }
 
     AdapterView.OnItemClickListener myOnItemClickListener = new AdapterView.OnItemClickListener() {
