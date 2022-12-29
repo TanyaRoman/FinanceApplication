@@ -7,6 +7,10 @@ public class Portfolios {
     Double expectedReturn;
     List<Share> share;
 
+    public Portfolios(){
+
+    }
+
     public Portfolios(Double risk, Double expectedReturn, List<Share> share) {
         this.risk = risk;
         this.expectedReturn = expectedReturn;

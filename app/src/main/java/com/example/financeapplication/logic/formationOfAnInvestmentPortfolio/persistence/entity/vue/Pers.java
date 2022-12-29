@@ -6,6 +6,9 @@ public class Pers {
     List<Coins> coins;
     List<Portfolios> portfolios;
 
+    public Pers() {
+    }
+
     public Pers(List<Coins> coins, List<Portfolios> portfolios) {
         this.coins = coins;
         this.portfolios = portfolios;

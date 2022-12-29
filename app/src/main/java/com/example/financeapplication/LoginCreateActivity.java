@@ -29,10 +29,12 @@ public class LoginCreateActivity extends AppCompatActivity implements View.OnCli
         Intent i;
         switch (view.getId()){
             case R.id.btn_login:
-                i = new Intent(this, LoginActivity.class);
+//                i = new Intent(this, LoginActivity.class);
+                i = new Intent(this, ChoiceActivity.class);
                 startActivity(i);
                 break;
             case R.id.btn_create:
+//                i = new Intent(this, ResultActivity.class);
                 i = new Intent(this, CreateActivity.class);
                 startActivity(i);
                 break;

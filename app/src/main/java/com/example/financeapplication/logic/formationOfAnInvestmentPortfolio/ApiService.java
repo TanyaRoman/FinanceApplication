@@ -2,6 +2,8 @@ package com.example.financeapplication.logic.formationOfAnInvestmentPortfolio;
 
 import android.os.AsyncTask;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.litesoftwares.coingecko.CoinGeckoApiClient;
 import com.litesoftwares.coingecko.domain.Coins.CoinList;
 import com.litesoftwares.coingecko.domain.Coins.MarketChart;
@@ -44,7 +46,7 @@ public class ApiService { //extends AsyncTask<String, String, String> {
 
     public void addData() throws IOException {
         selectCoins(); // обращается ко всем данным, считывает файл, заполняет popularCoins
-        System.out.println(popularCoins);
+//        System.out.println(popularCoins);
     }
 
 
@@ -135,39 +137,34 @@ public class ApiService { //extends AsyncTask<String, String, String> {
     }
 
     public List<List<Double>> doOptimization(){
-        System.out.println("doOptimization() - check");
         optimization = new SPEA(getExpReturnCoins(), getCov());
-
-        System.out.println("optimization");
-        System.out.println(optimization);
-
-        System.out.println("optimization - getExpReturnCoins()");
-        System.out.println(getExpReturnCoins());
-
-        System.out.println("optimization - getCov()");
-        System.out.println(getCov());
 
         return optimization.count();
     }
 
+//    public String getResult(List<String> listId) throws JsonProcessingException {
+//        return new ObjectMapper().writeValueAsString(getPortfolios(listId));
+//    }
+
     public Pers getPortfolios(List<String> listId){
+//        System.out.println("hi-hi-hi");
         selectedCoins.clear();
         portfolioList.clear();
         coins.clear();
         setSelectedCoins(listId); // заполняет selectedCoins отобранными криптами
-        System.out.println("selectedCoins");
-        System.out.println(selectedCoins);
+//        System.out.println("selectedCoins");
+//        System.out.println(selectedCoins);
 
         setHistory(); // заполняет coin историей
-        System.out.println("setHistory");
-        System.out.println(coins);
+//        System.out.println("setHistory");
+//        System.out.println(coins);
 
         setPortfolio(); // заполняет portfolio
-        System.out.println("portfolio");
-        System.out.println(portfolio);
+//        System.out.println("portfolio");
+//        System.out.println(portfolio);
 
         setPortfolioList();
-        System.out.println("TT");
+//        System.out.println("TT");
 
 //        return portfolioList;
 
@@ -175,7 +172,7 @@ public class ApiService { //extends AsyncTask<String, String, String> {
     }
 
     public void setPortfolioList(){
-        System.out.println("setPortfolioList() - check");
+//        System.out.println("setPortfolioList() - check");
         if (portfolioList.size() == 0) {
             List<List<Double>> optim = doOptimization();
             for (List<Double> list : optim) {

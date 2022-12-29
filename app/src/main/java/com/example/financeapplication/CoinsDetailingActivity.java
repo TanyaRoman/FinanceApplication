@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.financeapplication.logic.formationOfAnInvestmentPortfolio.ApiService;
+import com.example.financeapplication.logic.formationOfAnInvestmentPortfolio.persistence.entity.vue.Coins;
 import com.example.financeapplication.logic.formationOfAnInvestmentPortfolio.persistence.entity.vue.Pers;
 import com.example.financeapplication.logic.formationOfAnInvestmentPortfolio.persistence.entity.vue.Portfolios;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -26,48 +28,24 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ResultActivity extends AppCompatActivity implements View.OnClickListener{
+public class CoinsDetailingActivity extends AppCompatActivity implements View.OnClickListener{
 
     ListView lv;
     Button btn_back;
-    private List<Portfolios> portfoliosList;
-    private MyArrayAdapterPortfolio myArrayAdapter;
-
-
+    private List<Coins> coinsList;
+    private MyArrayAdapterCoins myArrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.result);
+        setContentView(R.layout.coins_detailing);
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
         Bundle arguments = getIntent().getExtras();              // what is it..?
-
-        System.out.println("hi O.O");
-        System.out.println(arguments.equals(null));
-        System.out.println(!arguments.equals(null));
-
-        if (!arguments.equals(null)) {
-            String data = arguments.get("criptoList").toString();
-            ApiService apiService = new ApiService();            // осуждаю
-
-            ArrayList<String> criptoList = null;
-            try {
-                criptoList = new ObjectMapper().readValue(data, ArrayList.class);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-
-            portfoliosList = new ArrayList<>();
-            try {
-                initList(apiService, criptoList);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        String data = arguments.get("criptoList").toString();
 
         // it doesn't work. i tried to do great code...
 //        String apiServ = arguments.get("apiService").toString();
@@ -76,31 +54,42 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
 //        } catch (JsonProcessingException e) {
 //            e.printStackTrace();
 //        }
+        ApiService apiService = new ApiService();
 
+        ArrayList<String> criptoList = null;
+        try {
+            criptoList = new ObjectMapper().readValue(data, ArrayList.class);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        System.out.println(criptoList);
+        System.out.println("criptoList");
 
         lv = (ListView) findViewById(R.id.lv_coin_det);
+        coinsList = new ArrayList<>();
 
         btn_back = (Button) findViewById(R.id.btn_back);
         btn_back.setOnClickListener(this);
 
-        myArrayAdapter = new ResultActivity.MyArrayAdapterPortfolio(this, R.layout.list_item_portfolio,
-                android.R.id.text1, portfoliosList);
+        try {
+            initList(apiService, criptoList);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
+        myArrayAdapter = new CoinsDetailingActivity.MyArrayAdapterCoins(this, R.layout.list_item_portfolio,
+                android.R.id.text1, coinsList);
         lv.setAdapter(myArrayAdapter);
-        lv.setOnItemClickListener(myOnItemClickListener);
     }
 
     public void onClick(View view) {
 
         switch (view.getId()){
-            case R.id.btn_back:
-//                Intent i = new Intent(this, ChoiceActivity.class);
+            case R.id.btn_calculate:
+//                Intent i = new Intent(this, ResultActivity.class);
                 Intent i = new Intent(this, LoginCreateActivity.class);
                 startActivity(i);
                 break;
-            case R.id.btn_detail:
-                System.out.println("i'm detail portfolio");
-                System.out.println();
         }
     }
 
@@ -113,61 +102,49 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
         s.add("bitcoin");
         s.add("cardano");
 
+        System.out.println("--------------------");
         Pers result = apiService.getPortfolios(s);
-        for (Portfolios p: result.getPortfolios()) {
-            portfoliosList.add(p);
+        System.out.println();
+        System.out.println(result.getCoins().size());
+        System.out.println(result.getPortfolios().size());
+        for (Coins c: result.getCoins()) {
+            System.out.println("**");
+            coinsList.add(c);
         }
     }
 
-    AdapterView.OnItemClickListener myOnItemClickListener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//            onClick(view);
-//            getCheckedItems(position);
-            portfoliosList.get(position);
-        }
-    };
 
+    private class MyArrayAdapterCoins extends ArrayAdapter<Coins> {
 
-    private class MyArrayAdapterPortfolio extends ArrayAdapter<Portfolios> {
-
-        Portfolios portfolios = new Portfolios();
-
-        MyArrayAdapterPortfolio(Context context, int resource, int textViewResourceId, List<Portfolios> objects) {
+        MyArrayAdapterCoins(Context context, int resource, int textViewResourceId, List<Coins> objects) {
             super(context, resource, textViewResourceId, objects);
         }
-
-//        Portfolios getCheckedItems(int position) {
-//            return checkedItems;
-//        }
-
-//        void toggleChecked(int position) {
-//            if (mCheckedMap.get(position)) {
-//                mCheckedMap.put(position, false);
-//            } else {
-//                mCheckedMap.put(position, true);
-//            }
-//
-//            notifyDataSetChanged();
-//        }
 
         @Override
         public View getView(int position, View convertView, @NonNull ViewGroup parent) {
             View row = convertView;
+            System.out.println("position");
+            System.out.println(position);
 
             if (row == null) {
                 LayoutInflater inflater = getLayoutInflater();
-                row = inflater.inflate(R.layout.list_item_portfolio, parent, false);
+                row = inflater.inflate(R.layout.list_item_cripto, parent, false);
             }
 
-            TextView tv_portf_numb = (TextView) row.findViewById(R.id.tv_portf_numb);
-            tv_portf_numb.setText(position + 1);
+            TextView tv_portf_numb = (TextView) row.findViewById(R.id.tv_cripto_name);
+            tv_portf_numb.setText(coinsList.get(position).getId());
+            System.out.println("coinsList.get(position).getId()");
+            System.out.println(coinsList.get(position).getId());
 
             TextView tv_prof = (TextView) row.findViewById(R.id.tv_prof);
-            tv_prof.setText(Double.toString(portfoliosList.get(position).getExpectedReturn()));
+            tv_prof.setText(Double.toString(coinsList.get(position).getExpectedReturn()));
+            System.out.println("Double.toString(coinsList.get(position).getExpectedReturn())");
+            System.out.println(Double.toString(coinsList.get(position).getExpectedReturn()));
 
             TextView tv_risk = (TextView) row.findViewById(R.id.tv_risk);
-            tv_risk.setText(Double.toString(portfoliosList.get(position).getRisk()));
+            tv_risk.setText(Double.toString(coinsList.get(position).getRisk()));
+            System.out.println("Double.toString(coinsList.get(position).getRisk())");
+            System.out.println(Double.toString(coinsList.get(position).getRisk()));
 
             return row;
         }
