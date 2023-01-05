@@ -23,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.financeapplication.logic.formationOfAnInvestmentPortfolio.ApiService;
 //import com.example.financeapplication.logic.coingecko.domain.Coins.CoinList;
 import com.example.financeapplication.logic.formationOfAnInvestmentPortfolio.persistence.entity.vue.Coins;
+import com.example.financeapplication.logic.formationOfAnInvestmentPortfolio.persistence.entity.vue.Pers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.litesoftwares.coingecko.domain.Coins.CoinList;
@@ -94,19 +95,25 @@ public class ChoiceActivity extends AppCompatActivity implements View.OnClickLis
 
         switch (view.getId()){
             case R.id.btn_calculate:
-                Intent i = new Intent(this, ResultActivity.class);
+//                Intent i = new Intent(this, ResultActivity.class);
 //                Intent i = new Intent(this, CoinsDetailingActivity.class);
+                Intent i = new Intent(this, Result2Activity.class);
                 String data = "";
                 String apiServ = "";
+//                Pers result = apiService.getPortfolios(myArrayAdapter.getCheckedItems());
                 try {
                     data = new ObjectMapper().writeValueAsString(myArrayAdapter.getCheckedItems());
                     apiServ = new ObjectMapper().writeValueAsString(apiService);
+
                 } catch (JsonProcessingException e) {
                     e.printStackTrace();
                 }
+//                System.out.println("--+++++++***");
+//                System.out.println(apiService);
+//                System.out.println(apiService.toString());
                 i.putExtra("criptoList", data);
-                i.putExtra("apiService", apiServ);
-
+                i.putExtra("apiServ", apiServ);
+//                i.putExtra("apiServ", apiService.toString());
                 startActivity(i);
                 break;
         }

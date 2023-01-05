@@ -17,21 +17,29 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.financeapplication.logic.formationOfAnInvestmentPortfolio.ApiService;
+import com.example.financeapplication.logic.formationOfAnInvestmentPortfolio.persistence.entity.vue.Coins;
 import com.example.financeapplication.logic.formationOfAnInvestmentPortfolio.persistence.entity.vue.Pers;
 import com.example.financeapplication.logic.formationOfAnInvestmentPortfolio.persistence.entity.vue.Portfolios;
+import com.example.financeapplication.logic.formationOfAnInvestmentPortfolio.persistence.entity.vue.Share;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ResultActivity extends AppCompatActivity implements View.OnClickListener{
+public class Result2Activity extends AppCompatActivity implements View.OnClickListener{
 
     ListView lv;
-    Button btn_back;
+    ListView lv_c;
+    Button btn_save_c;
     private List<Portfolios> portfoliosList;
+    private List<Coins> coinsList;
+//    private ApiService apiService;
     private MyArrayAdapterPortfolio myArrayAdapter;
+    private MyArrayAdapterCoins myArrayAdapterCoins;
 
 
 
@@ -39,15 +47,20 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.result);
+        setContentView(R.layout.result_2);
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        Bundle arguments = getIntent().getExtras();              // what is it..?
+        Bundle arguments = getIntent().getExtras();
 
+//        ApiService apiService;
         if ((!arguments.equals(null)) || (portfoliosList.equals(null))) {
             String data = arguments.get("criptoList").toString();
+//            String apiS = arguments.get("apiServ").toString();
+//            System.out.println("************");
+//            System.out.println(arguments.get(ApiService.class.getSimpleName()));
+//            apiService = (ApiService) arguments.get(ApiService.class.getSimpleName());
             ApiService apiService = new ApiService();            // осуждаю
 
             ArrayList<String> criptoList = null;
@@ -57,15 +70,25 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
                 e.printStackTrace();
             }
 
-            System.out.println(criptoList);
+//            try {
+////                System.out.println("---------------------");
+////                System.out.println(apiS);
+//                apiService = new ObjectMapper().readValue(apiS,  new TypeReference<ApiService>(){});
+////                System.out.println(apiService);
+//            } catch (JsonProcessingException e) {
+//                e.printStackTrace();
+//            }
+
+//            System.out.println(apiS);
+//            apiService = (ApiService) getReferrer(apiS);
+//            System.out.println(apiService);
             portfoliosList = new ArrayList<>();
+            coinsList = new ArrayList<>();
             try {
                 initList(apiService, criptoList);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            System.out.println("portfoliosList");
-            System.out.println(portfoliosList.size());
         }
 
         // it doesn't work. i tried to do great code...
@@ -79,11 +102,17 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
 
 
         lv = (ListView) findViewById(R.id.lv_portfolios);
+        lv_c = (ListView) findViewById(R.id.lv_coin_det);
 
-        btn_back = (Button) findViewById(R.id.btn_back);
-        btn_back.setOnClickListener(this);
 
-        myArrayAdapter = new ResultActivity.MyArrayAdapterPortfolio(this, R.layout.list_item_portfolio,
+        btn_save_c = (Button) findViewById(R.id.btn_save_c);
+        btn_save_c.setOnClickListener(this);
+
+        myArrayAdapterCoins = new Result2Activity.MyArrayAdapterCoins(this, R.layout.list_item_portfolio,
+                android.R.id.text1, coinsList);
+        lv_c.setAdapter(myArrayAdapterCoins);
+
+        myArrayAdapter = new Result2Activity.MyArrayAdapterPortfolio(this, R.layout.list_item_portfolio,
                 android.R.id.text1, portfoliosList);
 
         lv.setAdapter(myArrayAdapter);
@@ -91,43 +120,89 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     public void onClick(View view) {
-
+        Intent i;
         switch (view.getId()){
-            case R.id.btn_back:
+            case R.id.btn_save_c:
 //                Intent i = new Intent(this, ChoiceActivity.class);
-                Intent i = new Intent(this, LoginCreateActivity.class);
+                i = new Intent(this, LoginCreateActivity.class);
                 startActivity(i);
                 break;
-            case R.id.btn_detail:
-                System.out.println("i'm detail portfolio");
-                System.out.println();
+//            case R.id.lay:
+//                i = new Intent(this, PortfolioDetailingActivity.class);
+//                startActivity(i);
+//                break;
         }
     }
 
     private void initList(ApiService apiService, ArrayList<String> criptoList) throws IOException {
-
-        //it will change, when i set id
         apiService.addData();
-//        List<String> s = new ArrayList<>();
-//        s.add("algorand");
-//        s.add("bitcoin");
-//        s.add("cardano");
-
-//        Pers result = apiService.getPortfolios(s);
         Pers result = apiService.getPortfolios(criptoList);
         for (Portfolios p: result.getPortfolios()) {
             portfoliosList.add(p);
+        }
+        for (Coins c: result.getCoins()) {
+            coinsList.add(c);
         }
     }
 
     AdapterView.OnItemClickListener myOnItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//            onClick(view);
-//            getCheckedItems(position);
-            portfoliosList.get(position);
+//            System.out.println("click 1");
+//            System.out.println(portfoliosList.get(position));
+//            System.out.println(view);
+//            System.out.println(view.getId());
+            Intent i = new Intent(Result2Activity.this, PortfolioDetailingActivity.class);
+
+            String data = "";
+            String risk = "";
+            String exp = "";
+            try {
+//                data = new Gson().toJson(portfoliosList.get(position).getShare());
+                data = new ObjectMapper().writeValueAsString(portfoliosList.get(position).getShare());
+                risk = new ObjectMapper().writeValueAsString(portfoliosList.get(position).getRisk());
+                exp = new ObjectMapper().writeValueAsString(portfoliosList.get(position).getExpectedReturn());
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+            i.putExtra("criptoList", data);
+            i.putExtra("risk", risk);
+            i.putExtra("exp", exp);
+
+            startActivity(i);
         }
     };
+
+
+    private class MyArrayAdapterCoins extends ArrayAdapter<Coins> {
+
+        MyArrayAdapterCoins(Context context, int resource, int textViewResourceId, List<Coins> objects) {
+            super(context, resource, textViewResourceId, objects);
+        }
+
+        @Override
+        public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+            View row = convertView;
+
+            if (row == null) {
+                LayoutInflater inflater = getLayoutInflater();
+                row = inflater.inflate(R.layout.list_item_cripto, parent, false);
+            }
+
+            TextView tv_portf_numb = (TextView) row.findViewById(R.id.tv_cripto_name);
+            tv_portf_numb.setText(coinsList.get(position).getId());
+
+            TextView tv_prof = (TextView) row.findViewById(R.id.tv_prof);
+            tv_prof.setText(String.format("%.2f", coinsList.get(position).getExpectedReturn()));
+//            tv_prof.setText(Double.toString(coinsList.get(position).getExpectedReturn()));
+
+            TextView tv_risk = (TextView) row.findViewById(R.id.tv_risk);
+            tv_risk.setText(String.format("%.2f", coinsList.get(position).getRisk()));
+//            tv_risk.setText(Double.toString(coinsList.get(position).getRisk()));
+
+            return row;
+        }
+    }
 
 
     private class MyArrayAdapterPortfolio extends ArrayAdapter<Portfolios> {
@@ -142,7 +217,9 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
 //            return checkedItems;
 //        }
 
-//        void toggleChecked(int position) {
+//        void checked(int position) {
+//
+//        }
 //            if (mCheckedMap.get(position)) {
 //                mCheckedMap.put(position, false);
 //            } else {
@@ -161,18 +238,10 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
                 row = inflater.inflate(R.layout.list_item_portfolio_2, parent, false);
             }
 
-//            System.out.println("my portfolio's number");
-//            System.out.println(position);
-//            System.out.println(Integer.toString(position + 1));
-
             TextView tv_portf_numb = (TextView) row.findViewById(R.id.tv_portf_numb);
             tv_portf_numb.setText(Integer.toString(position + 1));
 
             TextView tv_prof = (TextView) row.findViewById(R.id.tv_prof);
-//            System.out.println("/////////////");
-//            System.out.println(String.format("%.2f", portfoliosList.get(position).getExpectedReturn()));
-//            System.out.println((String.format("%.2f", portfoliosList.get(position).getExpectedReturn())).getClass().getName());
-//            System.out.println((Double.toString(portfoliosList.get(position).getExpectedReturn())).getClass().getName());
             tv_prof.setText(String.format("%.2f", portfoliosList.get(position).getExpectedReturn()));
 //            tv_prof.setText(Double.toString(portfoliosList.get(position).getExpectedReturn()));
 
@@ -182,5 +251,7 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
 
             return row;
         }
+
+
     }
 }

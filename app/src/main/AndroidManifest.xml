@@ -29,6 +29,8 @@
         <activity android:name=".ChangeProfileActivity"></activity>
         <activity android:name=".ChoiceActivity"></activity>
         <activity android:name=".ResultActivity"></activity>
+        <activity android:name=".Result2Activity"></activity>
+        <activity android:name=".PortfolioDetailingActivity"></activity>
 
         <activity android:name=".CoinsDetailingActivity"></activity>
         <meta-data

@@ -44,6 +44,10 @@ public class ApiService { //extends AsyncTask<String, String, String> {
 //        return null;
 //    }
 
+    public ApiService(){
+
+    }
+
     public void addData() throws IOException {
         selectCoins(); // обращается ко всем данным, считывает файл, заполняет popularCoins
 //        System.out.println(popularCoins);

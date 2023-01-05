@@ -9,6 +9,10 @@ public class Share {
         this.count = count;
     }
 
+    public Share(){
+
+    }
+
     public String getId() {
         return id;
     }
