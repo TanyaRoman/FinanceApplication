@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 public class LoginCreateActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -15,6 +16,7 @@ public class LoginCreateActivity extends AppCompatActivity implements View.OnCli
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         setContentView(R.layout.login_create);
 
         btn_login = (Button) findViewById(R.id.btn_login);
@@ -29,12 +31,11 @@ public class LoginCreateActivity extends AppCompatActivity implements View.OnCli
         Intent i;
         switch (view.getId()){
             case R.id.btn_login:
-//                i = new Intent(this, LoginActivity.class);
-                i = new Intent(this, ChoiceActivity.class);
+                i = new Intent(this, LoginActivity.class);
+//                i = new Intent(this, ChoiceActivity.class);
                 startActivity(i);
                 break;
             case R.id.btn_create:
-//                i = new Intent(this, ResultActivity.class);
                 i = new Intent(this, CreateActivity.class);
                 startActivity(i);
                 break;

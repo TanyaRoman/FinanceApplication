@@ -95,7 +95,7 @@ public class PortfolioDetailingActivity extends AppCompatActivity implements Vie
         switch (view.getId()){
             case R.id.btn_save_p:
 //                Intent i = new Intent(this, ChoiceActivity.class);
-                Intent i = new Intent(this, Result2Activity.class);
+                Intent i = new Intent(this, MainPageActivity.class);
                 startActivity(i);
                 break;
         }
