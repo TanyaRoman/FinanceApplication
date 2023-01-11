@@ -1,9 +1,11 @@
-package com.example.financeapplication;
+package com.example.financeapplication.screen.portfolio;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,33 +14,31 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CheckedTextView;
+import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 //import androidx.constraintlayout.widget.ConstraintLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.financeapplication.R;
 import com.example.financeapplication.logic.formationOfAnInvestmentPortfolio.ApiService;
 //import com.example.financeapplication.logic.coingecko.domain.Coins.CoinList;
-import com.example.financeapplication.logic.formationOfAnInvestmentPortfolio.persistence.entity.vue.Coins;
-import com.example.financeapplication.logic.formationOfAnInvestmentPortfolio.persistence.entity.vue.Pers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.litesoftwares.coingecko.domain.Coins.CoinList;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class ChoiceActivity extends AppCompatActivity implements View.OnClickListener{
 
     ListView lv;
     Button btn_calculate;
+    EditText et_find;
 
-//    private ArrayList<String> criptoList = new ArrayList<>();
+    private ArrayList<String> criptoList = new ArrayList<>();
     private List<CoinList> coins;
     private MyArrayAdapter myArrayAdapter;
     private ApiService apiService;
@@ -53,6 +53,7 @@ public class ChoiceActivity extends AppCompatActivity implements View.OnClickLis
 
         lv = (ListView) findViewById(R.id.lv_choice);
         btn_calculate = (Button) findViewById(R.id.btn_calculate);
+        et_find = (EditText) findViewById(R.id.et_find);
 
         btn_calculate.setOnClickListener(this);
         apiService = new ApiService();
@@ -64,13 +65,43 @@ public class ChoiceActivity extends AppCompatActivity implements View.OnClickLis
             e.printStackTrace();
         }
 
-//        myArrayAdapter = new MyArrayAdapter(this, R.layout.list_item_choice,
-//                android.R.id.text1, criptoList);
         myArrayAdapter = new MyArrayAdapter(this, R.layout.list_item_choice,
-                android.R.id.text1, coins);
+                android.R.id.text1, criptoList);
+//        myArrayAdapter = new MyArrayAdapter(this, R.layout.list_item_choice,
+//                android.R.id.text1, coins);
 
         lv.setAdapter(myArrayAdapter);
         lv.setOnItemClickListener(myOnItemClickListener);
+
+        et_find.addTextChangedListener(new TextWatcher(){
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//                 ChoiceActivity.this.myArrayAdapter.getFilter().filter(charSequence);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if(charSequence.toString().equals("")){
+                    // reset listview
+                    for (CoinList cl: coins) {
+                        criptoList.add(cl.getName());
+                    }
+                    lv.setAdapter(myArrayAdapter);
+                } else {
+                    // perform search
+                    System.out.println("search");
+                    System.out.println(charSequence.toString());
+                    System.out.println(criptoList);
+                    searchItem(charSequence.toString());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
     }
 
     public void onClick(View view) {
@@ -119,15 +150,37 @@ public class ChoiceActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    public void searchItem(String textToSearch){
+        System.out.println("**************");
+        System.out.println(criptoList);
+        for(CoinList item: coins){
+            if(!item.getName().contains(textToSearch)){
+                System.out.println("--");
+                System.out.println(item.getName());
+                System.out.println(textToSearch);
+                criptoList.remove(item.getName());
+                System.out.println(criptoList);
+            }
+        }
+        System.out.println(criptoList);
+//        ArrayList<String> c = criptoList;
+//        criptoList.clear();
+//        criptoList.addAll(c);
+//        this.notifyDataSetChanged();
+
+        myArrayAdapter.notifyDataSetChanged();
+//        lv.invalidate();
+    }
+
     private void initList(ApiService apiService) throws IOException {
 
         apiService.addData();
         coins = apiService.getPopularCoins();
 //        List<CoinList> coins = apiService.getPopularCoins();
 //
-//        for (CoinList cl: coins) {
-//            criptoList.add(cl.getName());
-//        }
+        for (CoinList cl: coins) {
+            criptoList.add(cl.getName());
+        }
     }
 
     AdapterView.OnItemClickListener myOnItemClickListener = new AdapterView.OnItemClickListener() {
@@ -137,14 +190,14 @@ public class ChoiceActivity extends AppCompatActivity implements View.OnClickLis
         }
     };
 
-//    private class MyArrayAdapter extends ArrayAdapter<String> {
-    private class MyArrayAdapter extends ArrayAdapter<CoinList> {
+    private class MyArrayAdapter extends ArrayAdapter<String> {
+//    private class MyArrayAdapter extends ArrayAdapter<CoinList> {
 
         private SparseBooleanArray mCheckedMap = new SparseBooleanArray();
 
-//        MyArrayAdapter(Context context, int resource,
-//                       int textViewResourceId, List<String> objects) {
-            MyArrayAdapter(Context context, int resource, int textViewResourceId, List<CoinList> objects) {
+        MyArrayAdapter(Context context, int resource,
+                       int textViewResourceId, List<String> objects) {
+//            MyArrayAdapter(Context context, int resource, int textViewResourceId, List<CoinList> objects) {
             super(context, resource, textViewResourceId, objects);
 
             for (int i = 0; i < objects.size(); i++) {

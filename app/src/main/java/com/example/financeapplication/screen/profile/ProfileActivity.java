@@ -1,4 +1,4 @@
-package com.example.financeapplication;
+package com.example.financeapplication.screen.profile;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,6 +6,8 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.financeapplication.R;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener{
 

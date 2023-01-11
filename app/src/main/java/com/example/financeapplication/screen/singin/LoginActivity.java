@@ -1,4 +1,4 @@
-package com.example.financeapplication;
+package com.example.financeapplication.screen.singin;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.financeapplication.screen.profile.MainPageActivity;
+import com.example.financeapplication.R;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 

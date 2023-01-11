@@ -1,4 +1,4 @@
-package com.example.financeapplication;
+package com.example.financeapplication.screen.portfolio;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,15 +16,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.financeapplication.R;
 import com.example.financeapplication.logic.formationOfAnInvestmentPortfolio.ApiService;
 import com.example.financeapplication.logic.formationOfAnInvestmentPortfolio.persistence.entity.vue.Coins;
 import com.example.financeapplication.logic.formationOfAnInvestmentPortfolio.persistence.entity.vue.Pers;
 import com.example.financeapplication.logic.formationOfAnInvestmentPortfolio.persistence.entity.vue.Portfolios;
-import com.example.financeapplication.logic.formationOfAnInvestmentPortfolio.persistence.entity.vue.Share;
+import com.example.financeapplication.screen.singin.LoginCreateActivity;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.util.ArrayList;

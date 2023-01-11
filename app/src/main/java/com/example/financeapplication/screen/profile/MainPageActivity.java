@@ -1,4 +1,4 @@
-package com.example.financeapplication;
+package com.example.financeapplication.screen.profile;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,6 +6,10 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.financeapplication.screen.portfolio.ChoiceActivity;
+import com.example.financeapplication.R;
+import com.example.financeapplication.screen.singin.LoginCreateActivity;
 
 public class MainPageActivity extends AppCompatActivity implements View.OnClickListener{
 

@@ -34,7 +34,7 @@
     <string name="result_saved">Сохраненные рассчеты</string>
     
     <string name="choice_header">Выберете криптовалюты для рассчета</string>
-    <string name="find_crypto">Поиск по абревиатуре</string>
+    <string name="find_crypto">Поиск по аббревиатуре</string>
     <string name="calculate">Рассчитать</string>
     <string name="calculating">Считаем...</string>
     
