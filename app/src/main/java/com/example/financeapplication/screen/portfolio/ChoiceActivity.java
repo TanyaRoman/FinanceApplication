@@ -15,7 +15,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ListView;
+import android.widget.TextView;
 //import androidx.constraintlayout.widget.ConstraintLayout;
 
 import androidx.annotation.NonNull;
@@ -38,6 +41,7 @@ public class ChoiceActivity extends AppCompatActivity implements View.OnClickLis
     Button btn_calculate;
     EditText et_find;
 
+    private ArrayList<String> filterList = new ArrayList<>();
     private ArrayList<String> criptoList = new ArrayList<>();
     private List<CoinList> coins;
     private MyArrayAdapter myArrayAdapter;
@@ -82,24 +86,28 @@ public class ChoiceActivity extends AppCompatActivity implements View.OnClickLis
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(charSequence.toString().equals("")){
+               /* if(charSequence.toString().equals("")){
                     // reset listview
-                    for (CoinList cl: coins) {
-                        criptoList.add(cl.getName());
-                    }
+//                    for (CoinList cl: coins) {
+//                        criptoList.add(cl.getName());
+//                    }
+                    filterList.clear();
+                    filterList.addAll(criptoList);
+
                     lv.setAdapter(myArrayAdapter);
                 } else {
                     // perform search
-                    System.out.println("search");
-                    System.out.println(charSequence.toString());
-                    System.out.println(criptoList);
-                    searchItem(charSequence.toString());
-                }
+//                    System.out.println("search");
+//                    System.out.println(charSequence.toString());
+//                    System.out.println(filterList);
+//                    searchItem(charSequence.toString());
+                    ChoiceActivity.this.myArrayAdapter.getFilter().filter(charSequence);
+                }*/
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-
+                ChoiceActivity.this.myArrayAdapter.getFilter().filter(editable.toString());
             }
         });
     }
@@ -149,20 +157,26 @@ public class ChoiceActivity extends AppCompatActivity implements View.OnClickLis
                 break;
         }
     }
-
+/*
     public void searchItem(String textToSearch){
         System.out.println("**************");
         System.out.println(criptoList);
+        filterList.clear();
+        System.out.println(filterList);
         for(CoinList item: coins){
-            if(!item.getName().contains(textToSearch)){
+            String textToSearch1 = textToSearch.toLowerCase();
+//            if(!item.getName().contains(textToSearch)){
+            if(item.getName().contains(textToSearch1)){
                 System.out.println("--");
-                System.out.println(item.getName());
-                System.out.println(textToSearch);
-                criptoList.remove(item.getName());
-                System.out.println(criptoList);
+//                System.out.println(item.getName());
+//                System.out.println(textToSearch);
+//                criptoList.remove(item.getName());
+                filterList.add(item.getName());
+//                System.out.println(criptoList);
             }
         }
-        System.out.println(criptoList);
+        System.out.println(filterList);
+
 //        ArrayList<String> c = criptoList;
 //        criptoList.clear();
 //        criptoList.addAll(c);
@@ -171,6 +185,8 @@ public class ChoiceActivity extends AppCompatActivity implements View.OnClickLis
         myArrayAdapter.notifyDataSetChanged();
 //        lv.invalidate();
     }
+*/
+
 
     private void initList(ApiService apiService) throws IOException {
 
@@ -181,6 +197,7 @@ public class ChoiceActivity extends AppCompatActivity implements View.OnClickLis
         for (CoinList cl: coins) {
             criptoList.add(cl.getName());
         }
+        filterList.addAll(criptoList);
     }
 
     AdapterView.OnItemClickListener myOnItemClickListener = new AdapterView.OnItemClickListener() {
@@ -190,16 +207,27 @@ public class ChoiceActivity extends AppCompatActivity implements View.OnClickLis
         }
     };
 
-    private class MyArrayAdapter extends ArrayAdapter<String> {
+    private class MyArrayAdapter extends ArrayAdapter<String> implements Filterable {
 //    private class MyArrayAdapter extends ArrayAdapter<CoinList> {
 
         private SparseBooleanArray mCheckedMap = new SparseBooleanArray();
+        private ModelFilter filter;
+        private List<String> allModelItemsArray;
+        private List<String> filteredModelItemsArray;
 
         MyArrayAdapter(Context context, int resource,
                        int textViewResourceId, List<String> objects) {
 //            MyArrayAdapter(Context context, int resource, int textViewResourceId, List<CoinList> objects) {
             super(context, resource, textViewResourceId, objects);
 
+            this.allModelItemsArray = new ArrayList<String>();
+            allModelItemsArray.addAll(objects);
+            System.out.println("**************");
+            System.out.println(objects);
+            this.filteredModelItemsArray = new ArrayList<String>();
+            filteredModelItemsArray.addAll(objects);
+            System.out.println(filteredModelItemsArray);
+            getFilter();
             for (int i = 0; i < objects.size(); i++) {
                 mCheckedMap.put(i, false);
             }
@@ -251,8 +279,8 @@ public class ChoiceActivity extends AppCompatActivity implements View.OnClickLis
             }
 
             CheckBox checkedTextView = (CheckBox) row.findViewById(R.id.cb_cripto);
-//            checkedTextView.setText(criptoList.get(position));
-            checkedTextView.setText(coins.get(position).getName());
+            checkedTextView.setText(filteredModelItemsArray.get(position));
+//            checkedTextView.setText(coins.get(position).getName());
 
             Boolean checked = mCheckedMap.get(position);
             if (checked != null) {
@@ -260,6 +288,60 @@ public class ChoiceActivity extends AppCompatActivity implements View.OnClickLis
             }
 
             return row;
+        }
+
+        @Override
+        public Filter getFilter() {
+            if (filter == null){
+                filter  = new ModelFilter();
+            }
+            return filter;
+        }
+        class ViewHolder {
+            protected TextView text;
+        }
+
+        private class ModelFilter extends Filter {
+
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+
+                System.out.println("filter");
+                System.out.println(constraint);
+                constraint = constraint.toString().toLowerCase();
+                FilterResults result = new FilterResults();
+                if (constraint.toString().length() > 0) {
+                    ArrayList<String> filteredItems = new ArrayList<String>();
+
+                    System.out.println(allModelItemsArray);
+                    for (int i = 0, l = allModelItemsArray.size(); i < l; i++) {
+                        String m = allModelItemsArray.get(i);
+                        if (m.toLowerCase().contains(constraint))
+                            filteredItems.add(m);
+                    }
+                    System.out.println(filteredItems);
+                    result.count = filteredItems.size();
+                    result.values = filteredItems;
+                } else {
+                    synchronized (this) {
+                        result.values = allModelItemsArray;
+                        result.count = allModelItemsArray.size();
+                    }
+                }
+                return result;
+            }
+
+            @SuppressWarnings("unchecked")
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+
+                filteredModelItemsArray = (ArrayList<String>) results.values;
+                notifyDataSetChanged();
+                clear();
+                for (int i = 0, l = filteredModelItemsArray.size(); i < l; i++)
+                    add(filteredModelItemsArray.get(i));
+                notifyDataSetInvalidated();
+            }
         }
     }
 }
