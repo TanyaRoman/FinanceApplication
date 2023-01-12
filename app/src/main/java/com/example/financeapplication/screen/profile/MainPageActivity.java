@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.financeapplication.screen.portfolio.ChoiceActivity;
 import com.example.financeapplication.R;
 import com.example.financeapplication.screen.singin.LoginCreateActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainPageActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -17,10 +19,14 @@ public class MainPageActivity extends AppCompatActivity implements View.OnClickL
     Button btn_portfolio;
     Button btn_exit;
 
+    private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_page);
+
+        mAuth = FirebaseAuth.getInstance();
 
         btn_profile = (Button) findViewById(R.id.btn_profile);
         btn_portfolio = (Button) findViewById(R.id.btn_portfolio);
@@ -49,4 +55,15 @@ public class MainPageActivity extends AppCompatActivity implements View.OnClickL
                 break;
         }
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser != null){
+            System.out.println("ups");
+        }
+    }
+
 }

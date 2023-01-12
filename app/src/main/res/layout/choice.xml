@@ -23,6 +23,8 @@
         android:drawableLeft="@drawable/ic_find"
         android:gravity="center"
         android:paddingLeft="30dp"
+        android:hint="@string/find_crypto"
+        android:textColorHint="@color/text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

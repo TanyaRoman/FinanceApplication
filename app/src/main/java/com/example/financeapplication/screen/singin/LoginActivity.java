@@ -2,16 +2,24 @@ package com.example.financeapplication.screen.singin;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.financeapplication.screen.profile.MainPageActivity;
 import com.example.financeapplication.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -22,10 +30,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     EditText et_password;
     CheckBox cb_remember;
 
+    private FirebaseAuth mAuth;
+    private static final String TAG = "EmailPassword";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
+
+        mAuth = FirebaseAuth.getInstance();
 
         tv = (TextView) findViewById(R.id.text_header);
         btn_input = (Button) findViewById(R.id.btn_input);
@@ -47,13 +60,48 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         Intent i;
         switch (view.getId()){
             case R.id.btn_input:
-                i = new Intent(this, MainPageActivity.class);
-                startActivity(i);
+                loginAcc();
                 break;
+//                if (createAcc()){
+//                    System.out.println("login acc");
+//                    i = new Intent(this, MainPageActivity.class);
+////                    i = FirebaseAuth.getInstance().
+//                    startActivity(i);
+//                    break;
+//                }
             case R.id.btn_create_go:
                 i = new Intent(this, CreateActivity.class);
                 startActivity(i);
                 break;
         }
     }
+
+    private void loginAcc () {
+//        final boolean[] status = {false};
+        mAuth.signInWithEmailAndPassword(et_email.getText().toString(), et_password.getText().toString())
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInWithEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            Intent i = new Intent(LoginActivity.this, MainPageActivity.class);
+                            startActivity(i);
+//                            status[0] = true;
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInWithEmail:failure", task.getException());
+                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+//        for (boolean s: status) {
+//            if (!s)
+//                return false;
+//        }
+//        return true;
+    }
+
 }
