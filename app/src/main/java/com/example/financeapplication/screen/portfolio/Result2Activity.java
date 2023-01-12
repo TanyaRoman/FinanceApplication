@@ -36,7 +36,6 @@ public class Result2Activity extends AppCompatActivity implements View.OnClickLi
     Button btn_save_c;
     private List<Portfolios> portfoliosList;
     private List<Coins> coinsList;
-//    private ApiService apiService;
     private MyArrayAdapterPortfolio myArrayAdapter;
     private MyArrayAdapterCoins myArrayAdapterCoins;
 
@@ -53,14 +52,9 @@ public class Result2Activity extends AppCompatActivity implements View.OnClickLi
 
         Bundle arguments = getIntent().getExtras();
 
-//        ApiService apiService;
         if ((!arguments.equals(null)) || (portfoliosList.equals(null))) {
             String data = arguments.get("criptoList").toString();
-//            String apiS = arguments.get("apiServ").toString();
-//            System.out.println("************");
-//            System.out.println(arguments.get(ApiService.class.getSimpleName()));
-//            apiService = (ApiService) arguments.get(ApiService.class.getSimpleName());
-            ApiService apiService = new ApiService();            // осуждаю
+            ApiService apiService = new ApiService();
 
             ArrayList<String> criptoList = null;
             try {
@@ -68,19 +62,6 @@ public class Result2Activity extends AppCompatActivity implements View.OnClickLi
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
-
-//            try {
-////                System.out.println("---------------------");
-////                System.out.println(apiS);
-//                apiService = new ObjectMapper().readValue(apiS,  new TypeReference<ApiService>(){});
-////                System.out.println(apiService);
-//            } catch (JsonProcessingException e) {
-//                e.printStackTrace();
-//            }
-
-//            System.out.println(apiS);
-//            apiService = (ApiService) getReferrer(apiS);
-//            System.out.println(apiService);
             portfoliosList = new ArrayList<>();
             coinsList = new ArrayList<>();
             try {
@@ -90,19 +71,8 @@ public class Result2Activity extends AppCompatActivity implements View.OnClickLi
             }
         }
 
-        // it doesn't work. i tried to do great code...
-//        String apiServ = arguments.get("apiService").toString();
-//        try {
-//            apiService = new ObjectMapper().readValue(apiServ, ApiService.class);
-//        } catch (JsonProcessingException e) {
-//            e.printStackTrace();
-//        }
-
-
-
         lv = (ListView) findViewById(R.id.lv_portfolios);
         lv_c = (ListView) findViewById(R.id.lv_coin_det);
-
 
         btn_save_c = (Button) findViewById(R.id.btn_save_c);
         btn_save_c.setOnClickListener(this);
@@ -122,14 +92,9 @@ public class Result2Activity extends AppCompatActivity implements View.OnClickLi
         Intent i;
         switch (view.getId()){
             case R.id.btn_save_c:
-//                Intent i = new Intent(this, ChoiceActivity.class);
                 i = new Intent(this, LoginCreateActivity.class);
                 startActivity(i);
                 break;
-//            case R.id.lay:
-//                i = new Intent(this, PortfolioDetailingActivity.class);
-//                startActivity(i);
-//                break;
         }
     }
 
@@ -147,17 +112,12 @@ public class Result2Activity extends AppCompatActivity implements View.OnClickLi
     AdapterView.OnItemClickListener myOnItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//            System.out.println("click 1");
-//            System.out.println(portfoliosList.get(position));
-//            System.out.println(view);
-//            System.out.println(view.getId());
             Intent i = new Intent(Result2Activity.this, PortfolioDetailingActivity.class);
 
             String data = "";
             String risk = "";
             String exp = "";
             try {
-//                data = new Gson().toJson(portfoliosList.get(position).getShare());
                 data = new ObjectMapper().writeValueAsString(portfoliosList.get(position).getShare());
                 risk = new ObjectMapper().writeValueAsString(portfoliosList.get(position).getRisk());
                 exp = new ObjectMapper().writeValueAsString(portfoliosList.get(position).getExpectedReturn());
@@ -193,11 +153,9 @@ public class Result2Activity extends AppCompatActivity implements View.OnClickLi
 
             TextView tv_prof = (TextView) row.findViewById(R.id.tv_prof);
             tv_prof.setText(String.format("%.2f", coinsList.get(position).getExpectedReturn()));
-//            tv_prof.setText(Double.toString(coinsList.get(position).getExpectedReturn()));
 
             TextView tv_risk = (TextView) row.findViewById(R.id.tv_risk);
             tv_risk.setText(String.format("%.2f", coinsList.get(position).getRisk()));
-//            tv_risk.setText(Double.toString(coinsList.get(position).getRisk()));
 
             return row;
         }
@@ -206,27 +164,11 @@ public class Result2Activity extends AppCompatActivity implements View.OnClickLi
 
     private class MyArrayAdapterPortfolio extends ArrayAdapter<Portfolios> {
 
-        Portfolios portfolios = new Portfolios();
+//        Portfolios portfolios = new Portfolios();
 
         MyArrayAdapterPortfolio(Context context, int resource, int textViewResourceId, List<Portfolios> objects) {
             super(context, resource, textViewResourceId, objects);
         }
-
-//        Portfolios getCheckedItems(int position) {
-//            return checkedItems;
-//        }
-
-//        void checked(int position) {
-//
-//        }
-//            if (mCheckedMap.get(position)) {
-//                mCheckedMap.put(position, false);
-//            } else {
-//                mCheckedMap.put(position, true);
-//            }
-//
-//            notifyDataSetChanged();
-//        }
 
         @Override
         public View getView(int position, View convertView, @NonNull ViewGroup parent) {
@@ -242,15 +184,11 @@ public class Result2Activity extends AppCompatActivity implements View.OnClickLi
 
             TextView tv_prof = (TextView) row.findViewById(R.id.tv_prof);
             tv_prof.setText(String.format("%.2f", portfoliosList.get(position).getExpectedReturn()));
-//            tv_prof.setText(Double.toString(portfoliosList.get(position).getExpectedReturn()));
 
             TextView tv_risk = (TextView) row.findViewById(R.id.tv_risk);
             tv_risk.setText(String.format("%.2f", portfoliosList.get(position).getRisk()));
-//            tv_risk.setText(Double.toString(portfoliosList.get(position).getRisk()));
 
             return row;
         }
-
-
     }
 }

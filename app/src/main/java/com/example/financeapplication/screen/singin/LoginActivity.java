@@ -62,13 +62,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.btn_input:
                 loginAcc();
                 break;
-//                if (createAcc()){
-//                    System.out.println("login acc");
-//                    i = new Intent(this, MainPageActivity.class);
-////                    i = FirebaseAuth.getInstance().
-//                    startActivity(i);
-//                    break;
-//                }
             case R.id.btn_create_go:
                 i = new Intent(this, CreateActivity.class);
                 startActivity(i);
@@ -77,31 +70,22 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void loginAcc () {
-//        final boolean[] status = {false};
         mAuth.signInWithEmailAndPassword(et_email.getText().toString(), et_password.getText().toString())
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             Intent i = new Intent(LoginActivity.this, MainPageActivity.class);
                             startActivity(i);
-//                            status[0] = true;
                         } else {
-                            // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
-//        for (boolean s: status) {
-//            if (!s)
-//                return false;
-//        }
-//        return true;
     }
 
 }

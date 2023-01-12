@@ -60,14 +60,6 @@ public class PortfolioDetailingActivity extends AppCompatActivity implements Vie
             risk.setText(arguments.get("risk").toString());
         }
 
-        // it doesn't work. i tried to do great code...
-//        String apiServ = arguments.get("apiService").toString();
-//        try {
-//            apiService = new ObjectMapper().readValue(apiServ, ApiService.class);
-//        } catch (JsonProcessingException e) {
-//            e.printStackTrace();
-//        }
-
         lv = (ListView) findViewById(R.id.lv_coin_det);
 
         btn_save_p = (Button) findViewById(R.id.btn_save_p);
@@ -76,19 +68,12 @@ public class PortfolioDetailingActivity extends AppCompatActivity implements Vie
         myArrayAdapterCoins = new PortfolioDetailingActivity.MyArrayAdapterCoins(this, R.layout.list_item_part,
                 android.R.id.text1, coinsList);
         lv.setAdapter(myArrayAdapterCoins);
-//
-//        myArrayAdapter = new PortfolioDetailingActivity.MyArrayAdapterPortfolio(this, R.layout.list_item_portfolio,
-//                android.R.id.text1, portfoliosList);
-//
-//        lv.setAdapter(myArrayAdapter);
-//        lv.setOnItemClickListener(myOnItemClickListener);
     }
 
     public void onClick(View view) {
 
         switch (view.getId()){
             case R.id.btn_save_p:
-//                Intent i = new Intent(this, ChoiceActivity.class);
                 Intent i = new Intent(this, MainPageActivity.class);
                 startActivity(i);
                 break;

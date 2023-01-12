@@ -65,12 +65,6 @@ public class CreateActivity extends AppCompatActivity implements View.OnClickLis
         switch (view.getId()){
             case R.id.btn_input:
                 createAcc();
-//                if (createAcc()){
-//                    System.out.println("create acc");
-//                    i = new Intent(this, MainPageActivity.class);
-//                    startActivity(i);
-//                    break;
-//                }
             case R.id.btn_create_go:
                 i = new Intent(this, LoginActivity.class);
                 startActivity(i);
@@ -79,43 +73,22 @@ public class CreateActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void createAcc (){
-//        final boolean[] status = {false};
-//        FirebaseAuth.getInstance()
-//                .createUserWithEmailAndPassword(et_email.getText().toString(), et_password.getText().toString())
-//                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<AuthResult> task) {
-//                        if(task.isSuccessful()) {
-//                            status[0] = true;
-//                        }
-//                    }
-//                });
-
         mAuth.createUserWithEmailAndPassword(et_email.getText().toString(), et_password.getText().toString())
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             Intent i = new Intent(CreateActivity.this, MainPageActivity.class);
                             startActivity(i);
-//                            status[0] = true;
                         } else {
-                            // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             Toast.makeText(CreateActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
-
-//        for (boolean s: status) {
-//            if (!s)
-//                return false;
-//        }
-//        return true;
     }
 
 }

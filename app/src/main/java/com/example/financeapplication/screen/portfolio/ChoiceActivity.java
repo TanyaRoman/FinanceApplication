@@ -19,14 +19,12 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ListView;
 import android.widget.TextView;
-//import androidx.constraintlayout.widget.ConstraintLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.financeapplication.R;
 import com.example.financeapplication.logic.formationOfAnInvestmentPortfolio.ApiService;
-//import com.example.financeapplication.logic.coingecko.domain.Coins.CoinList;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.litesoftwares.coingecko.domain.Coins.CoinList;
@@ -71,8 +69,6 @@ public class ChoiceActivity extends AppCompatActivity implements View.OnClickLis
 
         myArrayAdapter = new MyArrayAdapter(this, R.layout.list_item_choice,
                 android.R.id.text1, criptoList);
-//        myArrayAdapter = new MyArrayAdapter(this, R.layout.list_item_choice,
-//                android.R.id.text1, coins);
 
         lv.setAdapter(myArrayAdapter);
         lv.setOnItemClickListener(myOnItemClickListener);
@@ -81,28 +77,10 @@ public class ChoiceActivity extends AppCompatActivity implements View.OnClickLis
 
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//                 ChoiceActivity.this.myArrayAdapter.getFilter().filter(charSequence);
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-               /* if(charSequence.toString().equals("")){
-                    // reset listview
-//                    for (CoinList cl: coins) {
-//                        criptoList.add(cl.getName());
-//                    }
-                    filterList.clear();
-                    filterList.addAll(criptoList);
-
-                    lv.setAdapter(myArrayAdapter);
-                } else {
-                    // perform search
-//                    System.out.println("search");
-//                    System.out.println(charSequence.toString());
-//                    System.out.println(filterList);
-//                    searchItem(charSequence.toString());
-                    ChoiceActivity.this.myArrayAdapter.getFilter().filter(charSequence);
-                }*/
             }
 
             @Override
@@ -113,33 +91,12 @@ public class ChoiceActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     public void onClick(View view) {
-//        String result = "";
-//        List<String> resultList = myArrayAdapter.getCheckedItems();
-//        for (int i = 0; i < resultList.size(); i++) {
-//            result += String.valueOf(resultList.get(i)) + "\n";
-//        }
-//
-//        Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG)
-//                .show();
-
-//        String result = "";
-//        List<Integer> resultPosList = myArrayAdapter.getCheckedItemPositions();
-//        List<String> idsList = new ArrayList<>();
-//        for (Integer i: resultPosList) {
-//            idsList.add(coins.get(i).)
-//        }
-//
-//        Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG)
-//                .show();
 
         switch (view.getId()){
             case R.id.btn_calculate:
-//                Intent i = new Intent(this, ResultActivity.class);
-//                Intent i = new Intent(this, CoinsDetailingActivity.class);
                 Intent i = new Intent(this, Result2Activity.class);
                 String data = "";
                 String apiServ = "";
-//                Pers result = apiService.getPortfolios(myArrayAdapter.getCheckedItems());
                 try {
                     data = new ObjectMapper().writeValueAsString(myArrayAdapter.getCheckedItems());
                     apiServ = new ObjectMapper().writeValueAsString(apiService);
@@ -147,58 +104,25 @@ public class ChoiceActivity extends AppCompatActivity implements View.OnClickLis
                 } catch (JsonProcessingException e) {
                     e.printStackTrace();
                 }
-//                System.out.println("--+++++++***");
-//                System.out.println(apiService);
-//                System.out.println(apiService.toString());
                 i.putExtra("criptoList", data);
                 i.putExtra("apiServ", apiServ);
-//                i.putExtra("apiServ", apiService.toString());
                 startActivity(i);
                 break;
         }
     }
-/*
-    public void searchItem(String textToSearch){
-        System.out.println("**************");
-        System.out.println(criptoList);
-        filterList.clear();
-        System.out.println(filterList);
-        for(CoinList item: coins){
-            String textToSearch1 = textToSearch.toLowerCase();
-//            if(!item.getName().contains(textToSearch)){
-            if(item.getName().contains(textToSearch1)){
-                System.out.println("--");
-//                System.out.println(item.getName());
-//                System.out.println(textToSearch);
-//                criptoList.remove(item.getName());
-                filterList.add(item.getName());
-//                System.out.println(criptoList);
-            }
-        }
-        System.out.println(filterList);
-
-//        ArrayList<String> c = criptoList;
-//        criptoList.clear();
-//        criptoList.addAll(c);
-//        this.notifyDataSetChanged();
-
-        myArrayAdapter.notifyDataSetChanged();
-//        lv.invalidate();
-    }
-*/
-
 
     private void initList(ApiService apiService) throws IOException {
 
         apiService.addData();
         coins = apiService.getPopularCoins();
-//        List<CoinList> coins = apiService.getPopularCoins();
-//
         for (CoinList cl: coins) {
             criptoList.add(cl.getName());
         }
         filterList.addAll(criptoList);
     }
+
+
+
 
     AdapterView.OnItemClickListener myOnItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
@@ -208,7 +132,6 @@ public class ChoiceActivity extends AppCompatActivity implements View.OnClickLis
     };
 
     private class MyArrayAdapter extends ArrayAdapter<String> implements Filterable {
-//    private class MyArrayAdapter extends ArrayAdapter<CoinList> {
 
         private SparseBooleanArray mCheckedMap = new SparseBooleanArray();
         private ModelFilter filter;
@@ -217,16 +140,12 @@ public class ChoiceActivity extends AppCompatActivity implements View.OnClickLis
 
         MyArrayAdapter(Context context, int resource,
                        int textViewResourceId, List<String> objects) {
-//            MyArrayAdapter(Context context, int resource, int textViewResourceId, List<CoinList> objects) {
             super(context, resource, textViewResourceId, objects);
 
             this.allModelItemsArray = new ArrayList<String>();
             allModelItemsArray.addAll(objects);
-            System.out.println("**************");
-            System.out.println(objects);
             this.filteredModelItemsArray = new ArrayList<String>();
             filteredModelItemsArray.addAll(objects);
-            System.out.println(filteredModelItemsArray);
             getFilter();
             for (int i = 0; i < objects.size(); i++) {
                 mCheckedMap.put(i, false);
@@ -260,7 +179,6 @@ public class ChoiceActivity extends AppCompatActivity implements View.OnClickLis
 
             for (int i = 0; i < mCheckedMap.size(); i++) {
                 if (mCheckedMap.get(i)) {
-//                    (checkedItems).add(criptoList.get(i));
                     (checkedItems).add(coins.get(i).getId());
                 }
             }
@@ -280,7 +198,6 @@ public class ChoiceActivity extends AppCompatActivity implements View.OnClickLis
 
             CheckBox checkedTextView = (CheckBox) row.findViewById(R.id.cb_cripto);
             checkedTextView.setText(filteredModelItemsArray.get(position));
-//            checkedTextView.setText(coins.get(position).getName());
 
             Boolean checked = mCheckedMap.get(position);
             if (checked != null) {
